@@ -15,7 +15,6 @@ namespace OneNoteAnalyzer
         public static void ExtractAttachment(string onepath, string exportdirectory, string onepass)
         {
             Console.WriteLine("\n      -> Extracted OneNote Document Attachments: \n");
-            Console.WriteLine("\n      -> onepass \n" + onepass);
             string DirectoryName = exportdirectory + "\\OneNoteAttachments";
             if (!Directory.Exists(DirectoryName))
             {
