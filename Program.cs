@@ -12,6 +12,21 @@ namespace OneNoteAnalyzer
 {
     class Program
     {
+        public static Document documentConfig(string onepath, string onePass)
+        {
+            Document OneNoteFile;
+            if (onePass != null)
+            {
+                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onePass };
+                OneNoteFile = new Document(onepath, loadOptions);
+
+            }
+            else
+            {
+                OneNoteFile = new Document(onepath);
+            }
+            return OneNoteFile;
+        }
         public static void ExtractAttachment(string onepath, string exportdirectory, string onepass)
         {
             Console.WriteLine("\n      -> Extracted OneNote Document Attachments: \n");
@@ -20,17 +35,7 @@ namespace OneNoteAnalyzer
             {
                 Directory.CreateDirectory(DirectoryName);
             }
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             IList<AttachedFile> onenotelist = OneNoteFile.GetChildNodes<AttachedFile>();
             var counter = 1;
             foreach (AttachedFile file in onenotelist)
@@ -53,17 +58,7 @@ namespace OneNoteAnalyzer
         public static void ExtractMetaData(string onepath, string onepass)
         {
 
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             int pagecount = OneNoteFile.GetChildNodes<Page>().Count;
             Console.WriteLine("\n       -> Page Count: " + pagecount);
             Console.WriteLine("       -> Page MetaData: \n");
@@ -87,17 +82,7 @@ namespace OneNoteAnalyzer
 
         public static void ExtractImages(string onepath, string exportdirectory, string onepass)
         {
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             string DirectoryName = exportdirectory + "\\OneNoteImages";
             if (!Directory.Exists(DirectoryName))
             {
@@ -139,17 +124,7 @@ namespace OneNoteAnalyzer
         public static void ExtractText(string onepath, string exportdirectory, string onepass)
         {
 
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             string DirectoryName = exportdirectory + "\\OneNoteText";
             if (!Directory.Exists(DirectoryName))
             {
@@ -182,17 +157,7 @@ namespace OneNoteAnalyzer
 
         public static void ExtractHyperLink(string onepath, string exportdirectory, string onepass)
         {
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             string DirectoryName = exportdirectory + "\\OneNoteHyperLinks";
             if (!Directory.Exists(DirectoryName))
             {
@@ -248,17 +213,7 @@ namespace OneNoteAnalyzer
 
         public static void ConvertToImage(string onepath, string exportdirectory, string onepass)
         {
-            Document OneNoteFile;
-            if (onepass != null)
-            {
-                LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                OneNoteFile = new Document(onepath, loadOptions);
-
-            }
-            else
-            {
-                OneNoteFile = new Document(onepath);
-            }
+            Document OneNoteFile = documentConfig(onepath, onepass);
             string DirectoryName = exportdirectory;
             string FileNameExt = Path.GetFileNameWithoutExtension(onepath);
             string finaldirectory = DirectoryName + "\\ConvertImage_" + FileNameExt + ".png";
@@ -274,17 +229,7 @@ namespace OneNoteAnalyzer
         {
             try
             {
-                Document OneNoteFile;
-                if (onepass != null)
-                {
-                    LoadOptions loadOptions = new LoadOptions { DocumentPassword = onepass };
-                    OneNoteFile = new Document(onepath, loadOptions);
-
-                }
-                else
-                {
-                    OneNoteFile = new Document(onepath);
-                }
+                Document OneNoteFile = documentConfig(onepath, onepass);
                 Console.WriteLine("[+] OneNote Document File Format: " + OneNoteFile.FileFormat);
                 if (OneNoteFile.FileFormat == FileFormat.Unknown)
                 {
@@ -347,7 +292,7 @@ ________                 _______          __            _____                .__
                 {
                     string FilePath = args[1];
                     string FilePass = null;
-                    if(args.Length > 3)
+                    if (args.Length > 3)
                     {
                         if (args[2] == "--pass")
                         {
